@@ -1,7 +1,7 @@
 from typing import Union
 from BayesNet import BayesNet
+# Willem you mf
 
-#harsh is bad in fifa
 class BNReasoner:
     def __init__(self, net: Union[str, BayesNet]):
         """
