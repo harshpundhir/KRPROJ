@@ -10,15 +10,6 @@ class NetworkPruning(BNReasoner):
         self.query = query
         self.evidence = evidence
 
-    def edge_pruning(self):
-        for evidence_edge in self.evidence:
-            copy_edges = []
-            for f, t in self.bn.structure.edges(nbunch=self.evidence):
-                copy_edges.append(t)
-            for e in copy_edges:
-                self.bn.del_edge((evidence_edge, e))
-        return
-
     def get_regular_nodes(self):
         regular_nodes = []
         for node in self.bn.get_all_variables():
@@ -50,7 +41,7 @@ class NetworkPruning(BNReasoner):
 
     def execute_pruning(self):
         print("Evidence and Query:", self.evidence, self.query)
-        self.edge_pruning()
+        bn.edge_pruning(self.evidence)
         self.node_pruning()
         return
 
