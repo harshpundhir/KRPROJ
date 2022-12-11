@@ -61,6 +61,14 @@ class BNReasoner(BayesNet):
         combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
         return combined_cpt
 
+    def edge_pruning(self, pruned_node):
+        for evidence_edge in pruned_node:
+            copy_edges = []
+            for f, t in self.bn.structure.edges(nbunch=pruned_node):
+                copy_edges.append(t)
+            for e in copy_edges:
+                self.bn.del_edge((evidence_edge, e))
+        return
 
 obj = BNReasoner("testing/lecture_example.BIFXML")
 

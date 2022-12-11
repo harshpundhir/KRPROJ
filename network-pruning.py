@@ -41,7 +41,7 @@ class NetworkPruning(BNReasoner):
 
     def execute_pruning(self):
         print("Evidence and Query:", self.evidence, self.query)
-        bn.edge_pruning(self.evidence)
+        self.edge_pruning(self.evidence)
         self.node_pruning()
         return
 
