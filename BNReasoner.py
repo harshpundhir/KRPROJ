@@ -3,8 +3,6 @@ from BayesNet import BayesNet
 import pandas as pd
 
 
-# Willem you mf
-
 class BNReasoner(BayesNet):
     def __init__(self, net: Union[str, BayesNet]):
         """
@@ -68,5 +66,3 @@ obj = BNReasoner("testing/lecture_example.BIFXML")
 
 # print(marginalize(obj.get_all_cpts()['Wet Grass?'], 'Rain?'))
 print(obj.multiply_factors([obj.bn.get_all_cpts()['Sprinkler?'], obj.bn.get_all_cpts()['Rain?']], 'Winter?'))
-
-
