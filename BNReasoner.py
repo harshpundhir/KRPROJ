@@ -72,6 +72,13 @@ class BNReasoner(BayesNet):
                 self.bn.del_edge((evidence_edge, e))
         return
 
+    def get_leaf_nodes(self, nodes):  # : object) -> object
+        leaf_nodes = []
+        for node in nodes:
+            if len(self.bn.get_children(node)) == 0:
+                leaf_nodes.append(node)
+        return leaf_nodes
+
 obj = BNReasoner("testing/lecture_example.BIFXML")
 
 # print(marginalize(obj.get_all_cpts()['Wet Grass?'], 'Rain?'))

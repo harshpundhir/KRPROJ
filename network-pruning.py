@@ -32,13 +32,6 @@ class NetworkPruning(BNReasoner):
             leaves = self.get_leaf_nodes(regular_nodes)
         return pruned_network
 
-    def get_leaf_nodes(self, nodes):  # : object) -> object
-        leaf_nodes = []
-        for node in nodes:
-            if len(self.bn.get_children(node)) == 0:
-                leaf_nodes.append(node)
-        return leaf_nodes
-
     def execute_pruning(self):
         print("Evidence and Query:", self.evidence, self.query)
         self.edge_pruning(self.evidence)
