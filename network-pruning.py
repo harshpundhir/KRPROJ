@@ -10,32 +10,10 @@ class NetworkPruning(BNReasoner):
         self.query = query
         self.evidence = evidence
 
-    def get_regular_nodes(self):
-        regular_nodes = []
-        for node in self.bn.get_all_variables():
-            if node not in self.evidence ^ self.query:
-                regular_nodes.append(node)
-        print("Regular nodes: ", regular_nodes)
-        return regular_nodes
-
-    def node_pruning(self):
-        regular_nodes = self.get_regular_nodes()
-        leaves = self.get_leaf_nodes(regular_nodes)
-
-        while leaves:
-            print("<< Loop")
-            print("leaves: ", leaves)
-            for leave in leaves:
-                self.bn.del_var(leave)
-
-            regular_nodes = self.get_regular_nodes()
-            leaves = self.get_leaf_nodes(regular_nodes)
-        return pruned_network
-
     def execute_pruning(self):
         print("Evidence and Query:", self.evidence, self.query)
         self.edge_pruning(self.evidence)
-        self.node_pruning()
+        self.leaf_node_pruning_loop(self.evidence ^ self.query)
         return
 
 

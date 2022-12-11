@@ -77,6 +77,26 @@ class BNReasoner(BayesNet):
                 leaf_nodes.append(node)
         return leaf_nodes
 
+    def get_regular_nodes(self, exception_nodes):
+        regular_nodes = []
+        for node in self.bn.get_all_variables():
+            if node not in exception_nodes:
+                regular_nodes.append(node)
+        return regular_nodes
+
+    def get_parents(self):
+        return
+    def leaf_node_pruning_loop(self, exception_nodes):
+        regular_nodes = self.get_regular_nodes(exception_nodes)
+        leaves = self.get_leaf_nodes(regular_nodes)
+
+        while leaves:
+            for leave in leaves:
+                self.bn.del_var(leave)
+            regular_nodes = self.get_regular_nodes(exception_nodes)
+            leaves = self.get_leaf_nodes(regular_nodes)
+        return
+
 obj = BNReasoner("testing/lecture_example.BIFXML")
 
 # print(marginalize(obj.get_all_cpts()['Wet Grass?'], 'Rain?'))
