@@ -226,3 +226,20 @@ class BayesNet:
         :param edge: Edge to be deleted (e.g. ('A', 'B')).
         """
         self.structure.remove_edge(edge[0], edge[1])
+
+# ------------- WE HAVE ADDED BASIC FUNCTIONS HERE
+
+    def get_parents(self, variable: str) -> List[str]:
+        return [c for c in self.structure.predecessors(variable)]
+
+    def get_descendants(self, node) -> List[str]:
+        total_descendants = []
+        for child in self.get_children(node):
+            total_descendants.append(child)
+
+        for child in total_descendants:
+            for grand_child in self.get_descendants(child):
+                if grand_child not in total_descendants:
+                    total_descendants.append(grand_child)
+        return total_descendants
+
