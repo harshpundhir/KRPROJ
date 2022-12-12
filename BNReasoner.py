@@ -27,7 +27,6 @@ class BNReasoner(BayesNet):
         partition_t_cpt = cpt[partition_t].drop(variable, axis=1)
         partition_f_cpt = cpt[~partition_t].drop(variable, axis=1)
 
-        print(columns)
         summed_cpt = pd.concat([partition_t_cpt, partition_f_cpt]).groupby(columns, as_index=False)["p"].sum()
         return summed_cpt
 
@@ -53,9 +52,13 @@ class BNReasoner(BayesNet):
         return cpt
 
     @staticmethod
-    def multiply_factors(cpts: list[pd.DataFrame], variable) -> pd.DataFrame:
+    def multiply_factors(cpts: list[pd.DataFrame]) -> pd.DataFrame:
         cpt1, cpt2 = cpts
-        combined_cpt = pd.merge(left=cpt1, right=cpt2, on=variable, how='inner')
+        variable = (set(cpt1.columns) & set(cpt2.columns))
+        variable.remove('p')
+
+        for var in variable:
+            combined_cpt = pd.merge(left=cpt1, right=cpt2, on=str(var), how='inner')
 
         combined_cpt['p'] = (combined_cpt['p_x'] * combined_cpt['p_y'])
         combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
@@ -97,7 +100,8 @@ class BNReasoner(BayesNet):
             leaves = self.get_leaf_nodes(regular_nodes)
         return
 
+
 obj = BNReasoner("testing/lecture_example.BIFXML")
 
 # print(marginalize(obj.get_all_cpts()['Wet Grass?'], 'Rain?'))
-print(obj.multiply_factors([obj.bn.get_all_cpts()['Sprinkler?'], obj.bn.get_all_cpts()['Rain?']], 'Winter?'))
+#print(obj.multiply_factors([obj.bn.get_all_cpts()['Sprinkler?'], obj.bn.get_all_cpts()['Rain?']]))

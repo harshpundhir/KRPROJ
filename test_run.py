@@ -1,10 +1,12 @@
 from BayesNet import BayesNet
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 obj = BayesNet()
 obj.load_from_bifxml("testing/lecture_example.BIFXML")
-for var in obj.get_all_variables():
-    print(obj.get_cpt(var))
-    print('*** NEXT *** Above', var)
+nx.draw(obj.get_interaction_graph(), with_labels=True)
+
+
 
 
