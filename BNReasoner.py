@@ -87,8 +87,6 @@ class BNReasoner(BayesNet):
                 regular_nodes.append(node)
         return regular_nodes
 
-    def get_parents(self):
-        return
     def leaf_node_pruning_loop(self, exception_nodes):
         regular_nodes = self.get_regular_nodes(exception_nodes)
         leaves = self.get_leaf_nodes(regular_nodes)

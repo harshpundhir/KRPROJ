@@ -22,5 +22,4 @@ example_evidence = {"J"}
 bnReasoner = NetworkPruning('testing/lecture_example2.BIFXML', example_query, example_evidence)
 pruned_network = copy.deepcopy(bnReasoner)  # why the fuck here
 pruned_network.execute_pruning()
-pruned_network.bn.draw_structure()
 bnReasoner.bn.draw_structure()
