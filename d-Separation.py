@@ -2,8 +2,7 @@ import copy
 from typing import Union
 from BNReasoner import BNReasoner
 from BayesNet import BayesNet
-
-
+#we zijn de mannen
 class DSeparation(BNReasoner):
     def __init__(self, net: Union[str, BayesNet], x: set, y: set, z: set):
 
@@ -18,20 +17,28 @@ class DSeparation(BNReasoner):
             connected = True
         return connected
 
-    def connected_sets(self, set_1, set_2):
-        check = False
-        for node_1 in set_1:
-            for node_2 in set_2:
-                check = self.connected_nodes(node_1, node_2)
-        return check
+    def disconnected_sets(self, set_1, set_2):
+        combined_1 = set_1
+        combined_2 = set_2
+        for node in set_1:
+            for descendant in self.bn.get_descendants(node):
+                combined_1.add(descendant)
+
+        for node2 in set_2:
+            print("Length: ", len(set_2))
+            for descendant in self.bn.get_descendants(node2):
+                combined_2.add(descendant)
+            print("Length: ", len(set_2))
+
+        for node in combined_1:
+            if node in combined_2:
+                return True
+        return False
 
     def execute(self):
         self.edge_pruning(self.Z)
         self.leaf_node_pruning_loop(self.X ^ self.Y ^ self.Z)
-        if self.connected_sets(self.X, self.Y):
-            return False
-        else:
-            return True
+        return self.disconnected_sets(self.X, self.Y)
 
 
 X = {"Rain?"}
