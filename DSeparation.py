@@ -31,8 +31,8 @@ class DSeparation(BNReasoner):
 
         for node in copy1:
             if node in copy2:
-                return True
-        return False
+                return False
+        return True
 
     def execute(self):
         self.edge_pruning(self.Z)
@@ -40,9 +40,10 @@ class DSeparation(BNReasoner):
         return self.disconnected_sets(self.X, self.Y)
 
 
-X = {"Rain?"}
+X = {"Slippery Road?"}
 Y = {"Winter?"}
-Z = {"Sprinkler?"}
+Z = {"Rain?"}
+
 bnReasoner = DSeparation('testing/lecture_example.BIFXML', X, Y, Z)
 bnReasoner.bn.draw_structure()
 d_sep = copy.deepcopy(bnReasoner)  # why the fuck here
