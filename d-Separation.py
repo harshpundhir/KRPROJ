@@ -3,6 +3,7 @@ from typing import Union
 from BNReasoner import BNReasoner
 from BayesNet import BayesNet
 #we zijn de mannen
+#fkced
 class DSeparation(BNReasoner):
     def __init__(self, net: Union[str, BayesNet], x: set, y: set, z: set):
 
@@ -39,7 +40,7 @@ class DSeparation(BNReasoner):
         self.edge_pruning(self.Z)
         self.leaf_node_pruning_loop(self.X ^ self.Y ^ self.Z)
         return self.disconnected_sets(self.X, self.Y)
-
+# We're fked
 
 X = {"Rain?"}
 Y = {"Winter?"}

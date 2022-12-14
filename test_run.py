@@ -1,5 +1,6 @@
 from BayesNet import BayesNet
 import networkx as nx
+from marginalDistribution import MarginalDistributions
 import matplotlib.pyplot as plt
 
 
