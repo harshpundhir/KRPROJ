@@ -2,8 +2,8 @@ import copy
 from typing import Union
 from BNReasoner import BNReasoner
 from BayesNet import BayesNet
-#we zijn de mannen
-#fkced
+
+
 class DSeparation(BNReasoner):
     def __init__(self, net: Union[str, BayesNet], x: set, y: set, z: set):
 
@@ -19,20 +19,18 @@ class DSeparation(BNReasoner):
         return connected
 
     def disconnected_sets(self, set_1, set_2):
-        combined_1 = set_1
-        combined_2 = set_2
+        copy1 = set_1.copy()
+        copy2 = set_2.copy()
         for node in set_1:
             for descendant in self.bn.get_descendants(node):
-                combined_1.add(descendant)
+                copy1.add(descendant)
 
-        for node2 in set_2:
-            print("Length: ", len(set_2))
-            for descendant in self.bn.get_descendants(node2):
-                combined_2.add(descendant)
-            print("Length: ", len(set_2))
+        for node in set_2:
+            for descendant in self.bn.get_descendants(node):
+                copy2.add(descendant)
 
-        for node in combined_1:
-            if node in combined_2:
+        for node in copy1:
+            if node in copy2:
                 return True
         return False
 
@@ -40,7 +38,7 @@ class DSeparation(BNReasoner):
         self.edge_pruning(self.Z)
         self.leaf_node_pruning_loop(self.X ^ self.Y ^ self.Z)
         return self.disconnected_sets(self.X, self.Y)
-# We're fked
+
 
 X = {"Rain?"}
 Y = {"Winter?"}
@@ -50,4 +48,4 @@ bnReasoner.bn.draw_structure()
 d_sep = copy.deepcopy(bnReasoner)  # why the fuck here
 checking = d_sep.execute()
 d_sep.bn.draw_structure()
-print("D-Seperation is", checking)
+print("D-Separation is", checking)
