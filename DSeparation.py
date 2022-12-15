@@ -40,13 +40,13 @@ class DSeparation(BNReasoner):
         return self.disconnected_sets(self.X, self.Y)
 
 
-X = {"Slippery Road?"}
-Y = {"Winter?"}
-Z = {"Rain?"}
-
-bnReasoner = DSeparation('testing/lecture_example.BIFXML', X, Y, Z)
-bnReasoner.bn.draw_structure()
-d_sep = copy.deepcopy(bnReasoner)  # why the fuck here
-checking = d_sep.execute()
-d_sep.bn.draw_structure()
-print("D-Separation is", checking)
+# X = {"Sprinkler?"}
+# Y = {"Winter?"}
+# Z = {"Rain?"}
+#
+# bnReasoner = DSeparation('testing/lecture_example.BIFXML', X, Y, Z)
+# bnReasoner.bn.draw_structure()
+# d_sep = copy.deepcopy(bnReasoner)  # why the fuck here
+# checking = d_sep.execute()
+# d_sep.bn.draw_structure()
+# print("D-Separation is", checking)

@@ -64,13 +64,14 @@ class BNReasoner(BayesNet):
         combined_cpt.drop(['p_x', 'p_y'], inplace=True, axis=1)
         return combined_cpt
 
-    def edge_pruning(self, pruned_node):
-        for evidence_edge in pruned_node:
+    def edge_pruning(self, prune_nodes):
+        for node in prune_nodes:
             copy_edges = []
-            for f, t in self.bn.structure.edges(nbunch=pruned_node):
-                copy_edges.append(t)
-            for e in copy_edges:
-                self.bn.del_edge((evidence_edge, e))
+            children = self.bn.get_children(node)
+            for child in children:
+                copy_edges.append(tuple((node, child)))
+            for edge in copy_edges:
+                self.bn.del_edge(edge)
         return
 
     def get_leaf_nodes(self, nodes):  # : object) -> object
@@ -90,7 +91,6 @@ class BNReasoner(BayesNet):
     def leaf_node_pruning_loop(self, exception_nodes):
         regular_nodes = self.get_regular_nodes(exception_nodes)
         leaves = self.get_leaf_nodes(regular_nodes)
-
         while leaves:
             for leave in leaves:
                 self.bn.del_var(leave)

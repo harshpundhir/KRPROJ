@@ -10,9 +10,6 @@ class Independence(BNReasoner):
 
         super().__init__(net)
         self.DSep = DSeparation(net, x, y, z)
-        self.X = x
-        self.Y = y
-        self.Z = z
 
     def execute(self):
         return self.DSep.execute()

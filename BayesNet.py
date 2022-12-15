@@ -11,6 +11,7 @@ from copy import deepcopy
 class BayesNet:
 
     def __init__(self) -> None:
+        super().__init__()
         # initialize graph structure
         self.structure = nx.DiGraph()
 
