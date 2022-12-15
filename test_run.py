@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 
 
 obj = BayesNet()
-obj.load_from_bifxml("testing/hailfinder25.xml")
-print(obj.get_all_cpts())
+obj.load_from_bifxml("testing/lecture_example.BIFXML")
 nx.draw(obj.get_interaction_graph(), with_labels=True)
 
 

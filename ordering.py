@@ -95,5 +95,5 @@ class Ordering(BNReasoner):
 
 orderer = Ordering("testing/lecture_example.BIFXML")
 X = ["Rain?","Winter?","Sprinkler?","Wet Grass?","Slippery Road?"]
-result = orderer.min_fill(orderer.bn, X)
+result = orderer.min_degree(orderer.bn, X)
 print(result)
