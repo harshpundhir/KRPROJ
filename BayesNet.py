@@ -14,6 +14,7 @@ class BayesNet:
         super().__init__()
         # initialize graph structure
         self.structure = nx.DiGraph()
+        self.instantiation = {}
 
     # LOADING FUNCTIONS ------------------------------------------------------------------------------------------------
     def create_bn(self, variables: List[str], edges: List[Tuple[str, str]], cpts: Dict[str, pd.DataFrame]) -> None:
@@ -244,3 +245,10 @@ class BayesNet:
                     total_descendants.append(grand_child)
         return total_descendants
 
+    def is_leaf_node(self, variable: str) -> bool:
+        """
+        Returns the children of the variable in the graph.
+        :param variable: Variable to get the children from
+        :return: List of children
+        """
+        return len(self.get_children(variable)) == 0

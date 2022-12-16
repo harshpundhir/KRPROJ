@@ -1,6 +1,6 @@
 import copy
 from typing import Union
-from BNReasoner import BNReasoner
+from BNReasonerOrig import BNReasoner
 from BayesNet import BayesNet
 
 
@@ -12,8 +12,9 @@ class NetworkPruning(BNReasoner):
 
     def execute(self):
         self.edge_pruning(self.evidence)
+
         self.leaf_node_pruning_loop(self.evidence ^ self.query)
-        return
+        return self
 
 #
 # example_query = {"Winter?"}

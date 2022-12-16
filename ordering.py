@@ -1,4 +1,4 @@
-from BNReasoner import BNReasoner
+from BNReasonerOrig import BNReasoner
 from BayesNet import BayesNet
 import copy
 import random
@@ -66,7 +66,7 @@ class Ordering(BNReasoner):
 
     def min_degree(self, bn: BayesNet, variables: list[str]):
         variables = copy.deepcopy(variables)
-        graph = bn.get_interaction_graph()
+        graph = bn.get_interaction_graph() # changing bn to self.bn
         order = []
 
         for i in range(len(variables)):
@@ -93,7 +93,3 @@ class Ordering(BNReasoner):
         return order
 
 
-orderer = Ordering("testing/lecture_example.BIFXML")
-X = ["Rain?","Winter?","Sprinkler?","Wet Grass?","Slippery Road?"]
-result = orderer.min_degree(orderer.bn, X)
-print(result)

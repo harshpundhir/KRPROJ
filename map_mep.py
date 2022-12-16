@@ -4,7 +4,7 @@ from typing import Union
 import pandas as pd
 from pandas import DataFrame
 
-from BNReasoner import BNReasoner
+from BNReasonerOrig import BNReasoner
 from BayesNet import BayesNet
 from marginalDistribution import multiply_factors, get_cpts_with_var
 from networkpruning import NetworkPruning
@@ -12,10 +12,10 @@ from ordering import Ordering, shuffle
 
 
 class MapAndMpe(BNReasoner):
-    def __init__(self, net: Union[str, BayesNet], query: set, evidence: {}):
+    def __init__(self, net: Union[str, BayesNet], q: set, e: {}):
         super().__init__(net)
-        self.query = query
-        self.evidence = evidence
+        self.query = q
+        self.evidence = e
         self.res = {}
 
     def execute(self):
@@ -23,7 +23,10 @@ class MapAndMpe(BNReasoner):
 
     def map(self, order: str):
         network = copy.deepcopy(self.bn)
-        network = NetworkPruning(network, self.query, self.evidence).execute()
+        evidence_list = set()
+        for x in self.evidence.keys():
+            evidence_list.add(x)
+        network = NetworkPruning(network, self.query, evidence_list).execute()
 
         if order == 'min_degree':
             ordered = (set(Ordering(self.bn).min_degree(network, network.get_all_variables())) - self.query)
@@ -36,7 +39,7 @@ class MapAndMpe(BNReasoner):
             ordered = (set(shuffle(network, network.get_all_variables(), 0)) - self.query)
             ordered.update(self.query)
 
-        cpt_tables = network.get_all_cpts()
+        cpt_tables = network.bn.get_all_cpts()
         result, assignment, multiplied_factors = DataFrame, {}, DataFrame
         for variable in ordered:
             factors = get_cpts_with_var(cpt_tables, variable)
@@ -46,8 +49,8 @@ class MapAndMpe(BNReasoner):
                 f = cpt_list[0]
 
             if len(cpt_list) > 1:
-                for indx in range(len(factors) - 1):
-                    f = multiply_factors(f, cpt_list[indx + 1])
+                for index in range(len(factors) - 1):
+                    f = multiply_factors(f, cpt_list[index + 1])
 
             if variable in self.query:
                 result, assignment = self.maximize_factors(f, variable)
@@ -61,7 +64,8 @@ class MapAndMpe(BNReasoner):
 
     def mpe(self, order: str):
         network = copy.deepcopy(self.bn)
-        network = NetworkPruning(network, self.query, self.evidence).prune_edges(network)
+        network = NetworkPruning(network, self.query, self.evidence)
+        network.edge_pruning(self.evidence)
 
         if order == 'min_degree':
             ordered = (set(Ordering(self.bn).min_degree(network, network.get_all_variables())) - self.query)
@@ -71,19 +75,20 @@ class MapAndMpe(BNReasoner):
             ordered.update(self.query)
         else:
             # TODO check this
-            ordered = (set(shuffle(network, network.get_all_variables(), 0)) - self.query)
-            ordered.update(self.query)
+            ordered = (set(network.get_all_variables()) - self.query)
 
-        cpt_tables = network.get_all_cpts()
-        result, assignment, multiplied_factors = DataFrame, {}, DataFrame
+        cpt_tables = network.bn.get_all_cpts()
+        print(cpt_tables)  # remove
+        # result, assignment, multiplied_factors = DataFrame, {}, DataFrame
         for variable in ordered:
             factors = get_cpts_with_var(cpt_tables, variable)
             cpt_list = list(factors.values())
+            print(cpt_list)  # remove
             f = cpt_list[0]
 
             if len(cpt_list) > 1:
-                for indx in range(len(factors) - 1):
-                    f = multiply_factors(f, cpt_list[indx + 1])
+                for index in range(len(factors) - 1):
+                    f = multiply_factors(f, cpt_list[index + 1])
 
             result, assignment = self.maximize_factors(f, variable)
 
@@ -100,12 +105,7 @@ class MapAndMpe(BNReasoner):
         # print(f'\nThis is the MPE given the evidence {self._evidence}: \n {trivial}')
         return trivial
 
-    def edge_pruning(self):
-        pass
-
-    def max_factors_instances(self, factors, variable):
-        return 0
-
+    @staticmethod
     def maximize_factors(self, factor, variable):
         cols = [col for col in factor.columns[:-1] if col != variable]
 
@@ -142,8 +142,8 @@ class MapAndMpe(BNReasoner):
         return sum_cpt
 
 
-# query = {"X", "I"}
-# evidence = {"J": True}
-# bnReasoner = MapAndMpe('testing/lecture_example2.BIFXML', query, evidence)
-# reasoner_map = bnReasoner.map('min_degree')
-# print(reasoner_map)
+query = {"X", "I"}
+evidence = {"J": True}
+bnReasoner = MapAndMpe('testing/lecture_example2.BIFXML', query, evidence)
+reasoner_map = bnReasoner.map('min_degree')
+print("mmmmm", reasoner_map)

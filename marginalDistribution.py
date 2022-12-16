@@ -2,7 +2,7 @@ from typing import Set, Union
 
 import pandas as pd
 
-from BNReasoner import BNReasoner
+from BNReasonerOrig import BNReasoner
 from BayesNet import BayesNet
 from ordering import Ordering
 
