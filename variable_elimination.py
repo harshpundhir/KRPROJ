@@ -28,7 +28,7 @@ class VariableEliminator(Ordering):  # accepts BN reasoner file
         # print(h)
         return h
 
-    def variable_elimination(self, to_remove: List[str], heuristic='manual') -> pd.DataFrame:
+    def variable_elimination(self, to_remove: set[str], heuristic='manual') -> pd.DataFrame:
         """ Sum out a set of variables by using variable elimination (according to given order).
         :return: the resulting factor
         """
@@ -57,15 +57,14 @@ class VariableEliminator(Ordering):  # accepts BN reasoner file
         return tau
 
 
-with open('testResults.txt', 'w') as f:
-    f.write("Variable elimination Results")
+# with open('testResults.txt', 'w') as f:
+#     f.write("Variable elimination Results")
 
-obj = VariableEliminator("testing/lecture_example.BIFXML")
+obj = VariableEliminator("testing/sleep_paralysis.BIFXML")
 
-obj = MarginalDistributions("testing/sleep_paralysis.BIFXML",{'SleepPar'}, {'Techno': True})
-variables = obj.bn.get_all_variables()
+variables = set(obj.bn.get_all_variables()) - {'SleepPar'}
 print(variables)
 # variables.remove('Wet Grass?')
 # variables.remove('Slippery Road?')
 
-print(obj.marginal_Dist({'SleepPar'}, {'Student': True}))
+print(obj.variable_elimination(variables))

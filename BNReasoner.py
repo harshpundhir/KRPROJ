@@ -456,29 +456,29 @@ def main():
     # Some examples
     bnr = BNReasoner('testing/lecture_example.BIFXML')
     a = bnr.sum_out_factors('Wet Grass?', 'Wet Grass?')
-    print(a)
+    print("--Summing out--\n", a)
 
     bnr2 = BNReasoner('testing/lecture_example.BIFXML')
     b = bnr2.multiply_factors(['Rain?', 'Sprinkler?'])
-    print(b)
+    print("--Multiple factors--\n",b)
 
     bnr3 = BNReasoner('testing/marginals_example.BIFXML')
     c = bnr3.compute_marginal(['C'], pd.Series({'A': True}), bnr3.min_degree_order())
-    print(c)
+    print("--Marginal 1--\n", c)
     cc = bnr3.compute_marginal(['C'], order=bnr3.min_degree_order())
-    print(cc)
+    print("--Marginal 2--\n",cc)
 
     bnr4 = BNReasoner('testing/lecture_example.BIFXML')
-    d = bnr4.compute_marginal(['Wet Grass?', 'Slippery Road?'], order=bnr4.min_degree_order())
-    print(d)
+    d = bnr4.compute_marginal(['Wet Grass?', 'Slippery Road?'], order=bnr4.min_fill_order())
+    print("--Marginal 2--\n", d)
     dd = bnr4.compute_marginal(['Wet Grass?', 'Slippery Road?'], pd.Series({'Winter?': True, 'Sprinkler?': False}),
-                               order=bnr4.min_degree_order())
+                               order=bnr4.min_fill_order())
     print(dd)
     bnr5 = BNReasoner('testing/lecture_example.BIFXML')
     d = bnr5.MPE(pd.Series({'Rain?': True, 'Wet Grass?': False}))
-    print(d)
+    print("--MPE--\n   for {'Rain?': True, 'Wet Grass?': False}\n", d)
     e = bnr5.MAP(['Rain?', 'Wet Grass?'], pd.Series({'Sprinkler?': True}))
-    print(e)
+    print("--MAP--\n   for Q = ['Rain?', 'Wet Grass?'] and E = 'Sprinkler?': True\n", e)
 
 
 if __name__ == '__main__':
