@@ -454,8 +454,16 @@ def init_factor(variables: List[str], value=0) -> pd.DataFrame:
 
 def main():
     # Some examples
+    obj = BNReasoner('testing/lecture_example.BIFXML')
+    print("-- d-separation--")
+    print(obj.d_separation(['Sprinkler?'], ['Wet Grass?'], ["Rain?"]), '\n')
+
+    obj2 = BNReasoner('testing/lecture_example.BIFXML')
+    print("Before Pruning", obj2.bn.get_all_cpts())
+    print("After Pruning",(obj2.network_pruning(['Sprinkler?'], {'Winter?': True})).get_all_cpts(),"\n_______________")
+
     bnr = BNReasoner('testing/lecture_example.BIFXML')
-    a = bnr.sum_out_factors('Wet Grass?', 'Wet Grass?')
+    a = bnr.sum_out_factors('Wet Grass?', 'Rain?')
     print(a)
 
     bnr2 = BNReasoner('testing/lecture_example.BIFXML')
