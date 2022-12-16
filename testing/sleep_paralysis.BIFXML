@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!--Author: Harsh, Geralda & Willem
+    Bayesian network in XMLBIF v0.3 (BayesNet Interchange Format)
+ -->
+
+<!-- DTD for the XMLBIF 0.3 format -->
+<!DOCTYPE BIF [
+	<!ELEMENT BIF ( NETWORK )*>
+	      <!ATTLIST BIF VERSION CDATA #REQUIRED>
+	<!ELEMENT NETWORK ( NAME, ( PROPERTY | VARIABLE | DEFINITION )* )>
+	<!ELEMENT NAME (#PCDATA)>
+	<!ELEMENT VARIABLE ( NAME, ( OUTCOME |  PROPERTY )* ) >
+	      <!ATTLIST VARIABLE TYPE (nature|decision|utility) "nature">
+	<!ELEMENT OUTCOME (#PCDATA)>
+	<!ELEMENT DEFINITION ( FOR | GIVEN | TABLE | PROPERTY )* >
+	<!ELEMENT FOR (#PCDATA)>
+	<!ELEMENT GIVEN (#PCDATA)>
+	<!ELEMENT TABLE (#PCDATA)>
+	<!ELEMENT PROPERTY (#PCDATA)>
+]>
+
+<BIF VERSION="0.3">
+<NETWORK>
+    <NAME>Lecture Example</NAME>
+
+    <!-- Variables-->
+    <VARIABLE TYPE="nature">
+        <NAME>Student</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>European</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Festival</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Alcohol</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Techno</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Stress</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>IrregSleep</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>GenPred</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>HypoDef</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>SleepDep</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Anxiety</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>Narcolepsy</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>HighSer</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+    <VARIABLE TYPE="nature">
+        <NAME>SleepPar</NAME>
+        <OUTCOME>True</OUTCOME>
+        <OUTCOME>False</OUTCOME>
+    </VARIABLE>
+
+    <!-- PCTs -->
+    <DEFINITION>
+        <FOR>Student</FOR>
+        <TABLE>0.80 0.20</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>European</FOR>
+        <TABLE>0.90 0.10</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Festival</FOR>
+        <GIVEN>Student</GIVEN>
+        <GIVEN>European</GIVEN>
+        <TABLE>0.90 0.10 0.80 0.20 0.70 0.30 0.60 0.40</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Alcohol</FOR>
+        <GIVEN>Student</GIVEN>
+        <GIVEN>Festival</GIVEN>
+        <TABLE>0.50 0.50 0.25 0.75 0.20 0.80 0.05 0.95</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Techno</FOR>
+        <GIVEN>European</GIVEN>
+        <GIVEN>Festival</GIVEN>
+        <TABLE>0.90 0.10 0.30 0.70 0.55 0.45 0.20 0.80</TABLE> <!-- Order? European, Festival, Techno-->
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Stress</FOR>
+        <GIVEN>Student</GIVEN>
+        <GIVEN>Alcohol</GIVEN>
+        <TABLE>0.85 0.15 0.60 0.40 0.30 0.70 0.15 0.85</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>IrregSleep</FOR>
+        <GIVEN>Festival</GIVEN>
+        <GIVEN>Alcohol</GIVEN>
+        <TABLE>0.80 0.20 0.60 0.40 0.40 0.60 0.30 0.70</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>GenPred</FOR>
+        <TABLE>0.90 0.10</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>HypoDef</FOR>
+        <GIVEN>GenPred</GIVEN>
+        <GIVEN>Stress</GIVEN>
+        <TABLE>0.97 0.03 0.95 0.05 0.80 0.20 0.70 0.30</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>SleepDep</FOR>
+        <GIVEN>GenPred</GIVEN>
+        <GIVEN>Stress</GIVEN>
+        <TABLE>0.50 0.50 0.30 0.70 0.30 0.70 0.20 0.80</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Anxiety</FOR>
+        <GIVEN>Stress</GIVEN>
+        <GIVEN>IrregSleep</GIVEN>
+        <TABLE>0.90 0.10 0.70 0.30 0.60 0.40 0.40 0.60</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>Narcolepsy</FOR>
+        <GIVEN>Stress</GIVEN>
+        <GIVEN>HypoDef</GIVEN>
+        <TABLE>0.99 0.01 0.10 0.90 0.98 0.02 0.03 0.97</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>HighSer</FOR>
+        <GIVEN>SleepDep</GIVEN>
+        <GIVEN>Alcohol</GIVEN>
+        <TABLE>0.70 0.30 0.10 0.90 0.90 0.10 0.25 0.75</TABLE>
+    </DEFINITION>
+    <DEFINITION>
+        <FOR>SleepPar</FOR>
+        <GIVEN>SleepDep</GIVEN>
+        <GIVEN>HighSer</GIVEN>
+        <GIVEN>Anxiety</GIVEN>
+        <GIVEN>IrregSleep</GIVEN>
+        <TABLE>0.97 0.03 0.88 0.12 0.92 0.08 0.86 0.14 0.91 0.09 0.80 0.20 0.90 0.10 0.70 0.30 0.91 0.09 0.88 0.12 0.88 0.12 0.82 0.18 0.70 0.30 0.63 0.37 0.66 0.34 0.30 0.70</TABLE>
+    </DEFINITION>
+</NETWORK>
+</BIF>

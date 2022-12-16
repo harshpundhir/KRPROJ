@@ -61,5 +61,11 @@ with open('testResults.txt', 'w') as f:
     f.write("Variable elimination Results")
 
 obj = VariableEliminator("testing/lecture_example.BIFXML")
-myset = ["Sprinkler?", "Winter?", "Rain?"]
-print(obj.variable_elimination(myset, 'min_degree'))
+
+obj = MarginalDistributions("testing/sleep_paralysis.BIFXML",{'SleepPar'}, {'Techno': True})
+variables = obj.bn.get_all_variables()
+print(variables)
+# variables.remove('Wet Grass?')
+# variables.remove('Slippery Road?')
+
+print(obj.marginal_Dist({'SleepPar'}, {'Student': True}))

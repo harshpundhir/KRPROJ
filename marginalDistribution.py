@@ -116,3 +116,12 @@ class MarginalDistributions(BNReasoner):
         cpt['p'] /= evidence_prob
         return cpt
 
+
+obj = MarginalDistributions("testing/sleep_paralysis.BIFXML",{'SleepPar'}, {'Techno': True})
+variables = obj.bn.get_all_variables()
+print(variables)
+# variables.remove('Wet Grass?')
+# variables.remove('Slippery Road?')
+
+print(obj.marginal_Dist({'SleepPar'}, {'Student': True}))
+

@@ -3,7 +3,7 @@
 from BNReasonerOrig import BNReasoner
 from BayesNet import BayesNet
 from networkpruning import NetworkPruning
-# from Independence import Independence
+from Independence import Independence
 from map_mep import MapAndMpe
 from DSeparation import DSeparation
 from ordering import Ordering
@@ -37,8 +37,8 @@ dsep_test1 = DSeparation(test_file1, {"Slippery Road?"}, {"Winter?"}, {"Rain?"})
 print(" >> Test 1\n  Manual calculation gives: True\n  BNReasoner gives: ", dsep_test1.execute())
 dsep_test2 = DSeparation(test_file2, {"X"}, {"O"}, {"J"})  # x, y ,z
 print(" >> Test 1\n  Manual calculation gives: True\n  BNReasoner gives: ", dsep_test2.execute())
-#
-#
+
+
 # print("\n-- Independence --\n")
 # test_dsep(test_file1, {"Slippery Road?"}, {"Winter?"}, {"Rain?"}, 1)  # x, y ,z
 # test_dsep(test_file2, {"X"}, {"O"}, {"J"}, 2)  # x, y ,z
