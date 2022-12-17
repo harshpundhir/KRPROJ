@@ -6,6 +6,10 @@ import networkx as nx
 from copy import deepcopy
 import cProfile
 
+import warnings
+
+warnings.filterwarnings('ignore')
+
 
 class BNReasoner:
     def __init__(self, net: Union[str, BayesNet]):
@@ -471,7 +475,16 @@ class BNReasoner:
             return ept
         return self._assignments_from_ept(ept)
 
-    def mpe(self, Q, e):
+    def get_remaining_elements_except_evidence(self, e: [set]) -> [set]:
+        allvars = self.bn.get_all_variables()
+        ans = set()
+        for i in allvars:
+            if i not in e:
+                ans.add(i)
+        return ans
+
+    def mpe(self, e):
+        Q = self.get_remaining_elements_except_evidence(e)
         # Start with edge pruning and node pruning
         # Get elimination order
         # maximize out for order
@@ -526,6 +539,14 @@ def test_map():
     print(assignments)
 
 
+def test_mpe():
+    reasoner = BNReasoner('testing/lecture_example.BIFXML')
+
+    e = pd.Series({'Winter?': True})
+    assignments = reasoner.mpe(e)
+    print(assignments)
+
+
 def test_dsep():
     reasoner = BNReasoner('testing/lecture_example.BIFXML')
     print(reasoner.dsep({"Rain?"}, {"Wet Grass?"}, {"Winter?"}))
@@ -565,7 +586,7 @@ def test_min_degree():
 def test_variable_elimination():
     reasoner2 = BNReasoner('testing/lecture_example.BIFXML')
     print(reasoner2.bn.get_all_variables())
-    print(reasoner2.variable_elimination2(["Rain?","Winter?","Sprinkler?"]))
+    print(reasoner2.variable_elimination2(["Rain?", "Winter?", "Sprinkler?"]))
 
 
 def main():
@@ -579,6 +600,8 @@ def main():
     test_min_fill()
     test_min_degree()
     test_variable_elimination()
+    test_map()
+    test_mpe()
 
 
 if __name__ == '__main__':
