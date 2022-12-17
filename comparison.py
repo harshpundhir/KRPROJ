@@ -3,11 +3,9 @@ import random
 import time
 
 from typing import Union
-from BNReasoner import BNReasoner
+from BNReasoner2 import BNReasoner
 from BayesNet import BayesNet
 from networkpruning import NetworkPruning
-from marginalDistribution import MarginalDistributions
-from ordering import Ordering
 
 
 def get_random_evidence_query(network):
@@ -44,8 +42,4 @@ for i in range(100):
     min_fill = Ordering(file)
     result1 = min_fill.min_degree()
 
-
-
 print(pruned_time_track)
-
-
