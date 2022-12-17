@@ -1,10 +1,11 @@
-import copy
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 import random
 import time
 
-from typing import Union
 from BNReasoner2 import BNReasoner
-from BayesNet import BayesNet
 from networkpruning import NetworkPruning
 
 
@@ -17,29 +18,46 @@ def get_random_evidence_query(network):
             evidence_sample.add(all_variables.pop(x))
         elif random.randint(0, 100) < 20:
             query_sample.add(all_variables.pop(x))
-    # if len(query_sample) == 0:
-    #     variable = all_variables[random.randint(0, (len(all_variables) - 1))]
-    #     query_sample.append(all_variables.pop(variable))
     return query_sample, evidence_sample
 
 
 file = 'testing/test.BIFXML'
 BNReasoner1 = BNReasoner(file)
 
-# Run pruned network
-pruned_time_track, normal_pruned_time_track, min_fill_time_track, min_degree_time_track = [], [], [], []
+time_1, time_2, time_3, time_4 = [], [], [], []
 
 for i in range(100):
     query, evidence = get_random_evidence_query(BNReasoner1)
 
     start_time1 = time.time()
-    BNReasoner1_pruned = NetworkPruning(file, query, evidence)
-    BNReasoner1_pruned.execute()
-    end_time1 = time.time()
-    pruned_time_track.append(end_time1 - start_time1)
+    pruned_network = NetworkPruning(file, query, evidence).execute()
+    pruned_network.marginal_distribution()
+    time_1.append(time.time() - start_time1)
 
     start_time2 = time.time()
-    min_fill = Ordering(file)
-    result1 = min_fill.min_degree()
+    time_2.append(time.time() - start_time2)
 
-print(pruned_time_track)
+    start_time3 = time.time()
+    network3 = BNReasoner(file)
+    network3.minfill_ordering(query)
+    time_3.append(time.time() - start_time3)
+
+    start_time4 = time.time()
+    network4 = BNReasoner(file)
+    network4.mindegree_ordering(query)
+    time_4.append(time.time() - start_time4)
+
+data_experiment1 = pd.concat([time_1['With Network Pruning'], time_2['Without Network Pruning']], axis=1)
+data_experiment2 = pd.concat([time_3['Min Fill Heuristic'],time_4['Min Degree Heuristic'],],axis=1)
+
+data_experiment1.columns = ['With Network Pruning', 'Without Network Pruning']
+data_experiment2.columns = ['Min Fill Heuristic', 'Min Degree Heuristic']
+
+print(data_experiment1)
+plt.figure(figsize=(8, 6)) # (width,height)
+plt.ylabel('Number of splits')
+plt.xlabel('Model Heuristic')
+sns.boxplot(data=data)
+plt.title("Comparison of splits for 9x9 sudokus")
+plt.show()
+
