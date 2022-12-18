@@ -93,15 +93,15 @@ class BNReasoner:
             cpt = BNReasoner.marginalize_pr(cpt, dep, pr_dep)
         return cpt[cpt[x] == True].p.values[0]
 
-    def prune(self, Q: set[str], e: pd.Series):
+    def prune(self, Q: set[str], e: set):
         """
         Given a set of query variables Q and evidence e, node- and edge-prune the
         Bayesian network s.t. queries of the form P(Q|E) can still be correctly
         calculated. (3.5 pts)
         """
-        e_vars = set(e.index)
+        # e_vars = set(e.index)
         # Delete all edges outgoing from evidence e and replace with reduced factor
-        for e_var in e_vars:
+        for e_var in e:
             children = self.bn.get_children(e_var)
             for child in children:
                 self.bn.del_edge((e_var, child))  # Edge prune
@@ -352,6 +352,23 @@ class BNReasoner:
         cols = sorted([c for c in cpt.columns if c != 'p'])
         return 'f_' + ','.join(cols)
 
+    def min_fill_degree_ordering(self, X):
+        """Given a set of variables X in the Bayesian network,
+        compute a good ordering for the elimination of X based on the min-degree heuristics (2pts)
+        and the min-fill heuristics (3.5pts). (Hint: you get the interaction graph ”for free”
+        from the BayesNet class.)"""
+        interaction_graph = self.bn.get_interaction_graph()
+        order = []
+
+        for i in range(len(X)):
+            Lowest_degree = self.lowest_degree(interaction_graph, X)
+            order.append(Lowest_degree)
+            if Lowest_degree[i - 1]==Lowest_degree:
+                self.min_degree_ordering(X)
+            interaction_graph = self.remove_node_interaction(Lowest_degree, interaction_graph)
+            X.remove(Lowest_degree)
+        return order
+
     def min_degree_ordering(self, X):
         """Given a set of variables X in the Bayesian network,
         compute a good ordering for the elimination of X based on the min-degree heuristics (2pts)
@@ -378,6 +395,22 @@ class BNReasoner:
         graph.remove_node(node)
         return graph
 
+    def min_degree_fill_ordering(self, X):
+        """Given a set of variables X in the Bayesian network,
+        compute a good ordering for the elimination of X based on the min-degree heuristics (2pts)
+        and the min-fill heuristics (3.5pts). (Hint: you get the interaction graph ”for free”
+        from the BayesNet class.)"""
+        interaction_graph = self.bn.get_interaction_graph()
+        order = []
+
+        for i in range(len(X)):
+            Lowest_degree = self.lowest_degree(interaction_graph, X)
+            order.append(Lowest_degree)
+            if Lowest_degree[i - 1]==Lowest_degree:
+                self.minfill_ordering(X)
+            interaction_graph = self.remove_node_interaction(Lowest_degree, interaction_graph)
+            X.remove(Lowest_degree)
+        return order
     def minfill_ordering(self, X):
         interaction_graph = self.bn.get_interaction_graph()
         order = []

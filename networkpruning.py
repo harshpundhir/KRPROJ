@@ -1,6 +1,6 @@
 import copy
 from typing import Union
-from BNReasonerOrig import BNReasoner
+from BNReasoner2 import BNReasoner
 from BayesNet import BayesNet
 
 
